@@ -14,7 +14,8 @@ struct Producto
 void leerProducto(Producto &);
 int agregarProducto(Producto[],Producto,int);
 void mostrarProducto(Producto);
-void buscarTipo(Producto,int);
+void buscarTipo(Producto[],int,int);
+void modificarProducto(Producto[], int);
 
 int main()
 {
@@ -49,32 +50,64 @@ int main()
                 cant=agregarProducto(lista,p,cant);
                 break;
             case '2':
-                cout<<"OPCION 2"<<endl;
+                if(cant>0)
+                {
+                    system("cls");
+                    cout<<"\t------ MODIFICAR PRODUCTOS ------"<<endl;
+                    cout<<"\n1. Limpieza | 2. Aseo Personal | 3. Bebidas | 4. Snacks"<<endl;
+                    cout<<"\nID |\tTIPO         |        NOMBRE      |      CANTIDAD(unidades)"<<endl;
+                    for(i=0;i<cant;i++)
+                    {
+                        cout<<i;
+                        mostrarProducto(lista[i]);
+                    }
+                    modificarProducto(lista, cant);
+                    break;
+                }
+                else
+                {
+                    cout<<"No hay productos ingresados"<<endl;
+                }               
                 break;  
             case '3':
-                cout<<"OPCION 3"<<endl;
+                if(cant>0)
+                {
+                    system("cls");
+                    cout<<"\t------ LISTA DE PRODUCTOS INGRESADOS ------"<<endl;
+                    cout<<"\n1. Limpieza | 2. Aseo Personal | 3. Bebidas | 4. Snacks"<<endl;
+                    cout<<"\n\tTIPO         |        NOMBRE      |      CANTIDAD(unidades)"<<endl;
+                    for(i=0;i<cant;i++)
+                    {
+                        mostrarProducto(lista[i]);
+                    }
+                    break;
+                }
+                else
+                {
+                    cout<<"No hay productos ingresados"<<endl;
+                }
                 break;
             case '4':
                 if(cant>0)
                 {
-                    cout<<"Ingrese tipo de producto a buscar: "<<endl;
+                    system("cls");
+                    cout<<"\t------ BUSQUEDA POR TIPO DE PRODUCTO ------"<<endl;
+                    cout<<"\n1. Limpieza | 2. Aseo Personal | 3. Bebidas | 4. Snacks"<<endl;
+                    cout<<"\nIngrese tipo de producto a buscar: ";
                     cin>>ti;
-                    for(i=0;i<cant;i++)
-                    {
-                        buscarTipo(lista[i], ti);
-                    }
-                break;
+                    buscarTipo(lista,cant,ti);
+                    break;
                 }
                 else
                 {
-                    cout<<"Aun no hay productos registrados"<<endl;
+                    cout<<"No hay productos ingresados"<<endl;
                 }
                 break;
             default:
             cout<<"Categoria no valida. Intente nuevamente"<<endl;
         }
         cout<<"  "<<endl;
-        system("PAUSE");
+        system("pause");
     }while(cat!='0');
 
     cout<<"FIN DEL PROGRAMA"<<endl;
@@ -88,7 +121,8 @@ void leerProducto(Producto &p)//bien
     do
     {
         system("cls");
-        cout<<"\t|1. Limpieza|2. Aseo Personal|3. Bebidas|4. Snacks|"<<endl;
+        cout<<"\t------ INGRESE PRODUCTO ------"<<endl;
+        cout<<"\n1. Limpieza | 2. Aseo Personal | 3. Bebidas | 4. Snacks"<<endl;
         cout<<"\nIngrese Tipo de Producto: ";
         cin>>p.tipo;
         cin.ignore();
@@ -96,13 +130,13 @@ void leerProducto(Producto &p)//bien
         getline(cin, p.nombre);
         cout<<"Ingrese Cantidad: ";
         cin>>p.cantidad;
-        cout<<"Se registro: "<<endl;
-        cout<<"TIPO         |        NOMBRE      |      CANTIDAD(unidades)"<<endl;
-        cout<<" "<<p.tipo<<"     "<<p.nombre<<"     "<<p.cantidad<<endl;
-        cout<<"Es correcto? (S/N): ";
+        cout<<"\nSe registro: "<<endl;
+        cout<<"\tTIPO         |        NOMBRE      |      CANTIDAD(unidades)"<<endl;
+        cout<<"\t"<<p.tipo<<"\t\t"<<p.nombre<<"\t\t\t"<<p.cantidad<<endl;
+        cout<<"\nEs correcto? (S/N): ";
         cin>>op;
     }while(op!='s' && op!='S');
-    cout<<"---- REGISTRO EXITOSO ----"<<endl;
+    cout<<"\n\t----- REGISTRO EXITOSO -----"<<endl;
 }
 
 int agregarProducto(Producto lista[], Producto p, int cant)//bien
@@ -112,15 +146,94 @@ int agregarProducto(Producto lista[], Producto p, int cant)//bien
     return cant;
 }
 
-void buscarTipo(Producto p,int ti)//falta
+void mostrarProducto(Producto p)//bien
 {
-    system("cls");
-    if(p.tipo==ti)
+    cout<<"\t"<<p.tipo<<"\t\t"<<p.nombre<<"\t\t\t"<<p.cantidad<<endl;
+}
+
+void buscarTipo(Producto lista[], int cant, int ti)//bien
+{
+    int i;
+    cout<<"Lista de productos de tipo "<<ti<<" :"<<endl;
+    cout<<"\n\tTIPO         |        NOMBRE      |      CANTIDAD(unidades)"<<endl;
+    for(i=0;i<cant;i++)
     {
-        cout<<p.tipo<<"     "<<p.nombre<<"     "<<p.cantidad<<endl;
+        if(lista[i].tipo==ti)
+        {
+            cout<<"\t"<<lista[i].tipo<<"\t\t"<<lista[i].nombre<<"\t\t\t"<<lista[i].cantidad<<endl;
+        }
     }
-    else
+}
+
+void modificarProducto(Producto lista[], int cant)
+{
+    int id,i;
+    char op;
+    cout<<"\nIngrese ID de producto a modificar: ";
+    cin>>id;
+
+    for(i=0;i<cant;i++)
     {
-        cout<<"No se encontraro productos del tipo: "<<ti<<endl;
-    }
+        if (i==id)
+        {
+           cout<<"Modificar Tipo? (S/N): ";
+           cin>>op;
+           if(op=='S' || op=='s')
+           {
+                cout<<"\tIngrese Tipo: ";
+                cin>>lista[i].tipo;
+                cout<<"Modificar Nombre? (S/N): ";
+                cin>>op;
+                if(op=='S' || op=='s')
+                {
+                    cout<<"\tIngrese Nombre: ";
+                    cin>>lista[i].nombre;
+                    cout<<"Modificar Cantidad? (S/N): ";
+                    cin>>op;
+                    if(op=='S' || op=='s')
+                    {
+                        cout<<"\tIngrese Cantidad: ";
+                        cin>>lista[i].cantidad;
+                    }
+                }
+                else
+                {
+                    cout<<"Modificar Cantidad? (S/N): ";
+                    cin>>op;
+                    if(op=='S' || op=='s')
+                    {
+                        cout<<"\tIngrese Cantidad: ";
+                        cin>>lista[i].cantidad;
+                    }
+                }
+           }
+           else
+           {
+                cout<<"Modificar Nombre? (S/N): ";
+                cin>>op;
+                if(op=='S' || op=='s')
+                {
+                    cout<<"\tIngrese Nombre: ";
+                    cin>>lista[i].nombre;
+                    cout<<"Modificar Cantidad? (S/N): ";
+                    cin>>op;
+                    if(op=='S' || op=='s')
+                    {
+                        cout<<"\tIngrese Cantidad: ";
+                        cin>>lista[i].cantidad;
+                    }
+                }
+                else
+                {
+                    cout<<"Modificar Cantidad? (S/N): ";
+                    cin>>op;
+                    if(op=='S' || op=='s')
+                    {
+                        cout<<"\tIngrese Cantidad: ";
+                        cin>>lista[i].cantidad;
+                    }
+                }
+            }
+        }
+    } 
 }
